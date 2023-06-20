@@ -63,5 +63,9 @@ def Bo(correlacion, Rs, T, Yg, Yo = None, API = None):
                         ((0.24626) * (T - 460) ** 0.5371)) ** 3.0936
 
 #%%
-b = Bo('petrosky', 24.18, 528, 0.85, None, 40)
-print (b)
+#Funcion para Pb
+
+def Pb(correlacion, Rs, T, API, Yg):
+    a = 0.00091*(T-460) - (0.0125*API)
+    Pb = 18.2*(((Rs/Yg)**0.83)*(10**a))-1.4)
+    return Pb

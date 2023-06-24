@@ -17,12 +17,12 @@ def rs2(Correlacion, P, API, T, Yg = None, Yo = None):
     :param Yo: Densidad del petroleo
     :return: Solubilidad del gas (Rs) [pcn/bn]
     """
-    if Correlacion == 'standing':
+    if Correlacion == 1:
         x1 = (0.0125*API) - (0.00091*(T-460))
         Rs = Yg*(((P/18.2)+1.4)*(10**x1))**1.2048
         return Rs
 
-    elif Correlacion == 'glaso':
+    elif Correlacion == 2:
         x2 = 2.8869 - (14.811 - (3.3093*math.log(P,10)))**0.5
         Pb = 10**x2
         Rs = Yg*(((API**0.989/(T-469)**0.172)*Pb))**1.2255
@@ -40,20 +40,20 @@ def rs(Correlacion, P, API, T, Yg = None, Yo = None):
     :return: Solubilidad del gas (Rs) [pcn/bn]
     """
     Rs1 = []
-    if Correlacion == 'standing':
+    if Correlacion == 1:
         x1 = 0.0125*API - 0.00091*(T-460)
         for i in P:
             Rs = Yg*(((i/18.2)+1.4)*(10**x1))**1.2048
             Rs1.append(round(Rs,2))
-        return np.array(Rs1)
+        return Rs1
 
-    elif Correlacion == 'glaso':
+    elif Correlacion == 2:
         for j in P:
             x2 = 2.8869 - (14.811 - (3.3093*math.log(j,10)))**0.5
             Pb = 10**x2
             Rs = Yg*(((API**0.989/(T-469)**0.172)*Pb))**1.2255
             Rs1.append(round(Rs,2))
-        return np.array(Rs1)
+        return Rs1
 
 
 

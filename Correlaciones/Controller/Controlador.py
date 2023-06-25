@@ -48,6 +48,7 @@ VAL_RS = "valores_solubilidad"
 VAL_BO = "valores_bo"
 VAL_PB = "valores_pb"
 VAL_UO = "valores_uo"
+VAL_T = "valores_t"
 
 # Funcion main
 def main():
@@ -112,21 +113,23 @@ def main():
     b = burbuja.tolist()
     viscosidad = sheet[VAL_UO].options(np.array).value
     v = viscosidad.tolist()
+    temperatura = sheet[VAL_T].options(np.array).value
+    t = temperatura.tolist()
 
     #Crear dataframes para las graficas con seaborn
     df1 = pd.DataFrame({"x":s,"y":p})
     df2 = pd.DataFrame({"x": f, "y": p})
     df3 = pd.DataFrame({"x":s , "y":b})
-    df4 = pd.DataFrame({"x": v, "y": p})
+    df4 = pd.DataFrame({"x": v, "y": t})
 
     # P vs Rs
     fig1 = plt.figure(figsize=(10, 7))
-    ax = sns.lineplot(df1, x = "x", y = "y", color="orange",markers=True)
+    ax = sns.lineplot(df1, x = "x", y = "y", color="orange")
     plt.xlabel("Solubilidad")
     plt.ylabel("Presion")
     plt.suptitle("P vs Rs")
     sheet.pictures.add(fig1, name="P vs Rs", update=True, left=sheet.range("A16").left,
-                       top=sheet.range("A16").top, height=310, width = 395)
+                       top=sheet.range("A16").top, height=310, width=395)
 
     # P vs Bo
     fig2 = plt.figure(figsize=(10, 7))
@@ -135,7 +138,7 @@ def main():
     plt.ylabel("Presion")
     plt.suptitle("P vs Bo")
     sheet.pictures.add(fig2, name="P vs Bo", update=True, left=sheet.range("J16").left,
-                       top=sheet.range("J16").top, height=310, width = 395)
+                       top=sheet.range("J16").top, height=310, width=395)
 
     # Rs vs Pb
     fig3 = plt.figure(figsize=(10, 7))
@@ -144,16 +147,16 @@ def main():
     plt.ylabel("Presion de Burbuja")
     plt.suptitle("Pb vs Rs")
     sheet.pictures.add(fig3, name="Pb vs Rs", update=True, left=sheet.range("A48").left,
-                       top=sheet.range("A48").top, height=310, width = 395)
+                       top=sheet.range("A48").top, height=310, width=395)
 
-    # P vs Uo
+    # T vs Uo
     fig4 = plt.figure(figsize=(10, 7))
     ax = sns.lineplot(df4, x="x", y="y",color="green")
     plt.xlabel("Viscosidad")
-    plt.ylabel("Presion")
-    plt.suptitle("P vs Uo")
-    sheet.pictures.add(fig4, name="P vs Uo", update=True, left=sheet.range("J48").left,
-                       top=sheet.range("J48").top, height=310, width = 395)
+    plt.ylabel("Temperatura")
+    plt.suptitle("T vs Uo")
+    sheet.pictures.add(fig4, name="T vs Uo", update=True, left=sheet.range("J48").left,
+                       top=sheet.range("J48").top, height=310, width=395)
 
 
 if __name__ == "__main__":

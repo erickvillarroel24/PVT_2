@@ -1,14 +1,12 @@
 #%%
+# librerias
 import math
-
-import numpy as np
-
 
 #%%
 #Funcion para Rs
 def Rs(Correlacion, P, API, T, Yg = None, Yo = None):
     """
-    :param Correlacion: Standing o Glaso
+    :param Correlacion: Standing=1 o Glaso=2
     :param P: Presion del sistema (psi)
     :param API: Gravedad API del petroleo
     :param T: Temperatura del sistema (°R)
@@ -31,7 +29,7 @@ def Rs(Correlacion, P, API, T, Yg = None, Yo = None):
 #Funcion para Bo
 def Bo(Correlacion, Rs, T, Yg, API= None, Yo = None):
     """
-    :param Correlacion: Standing o Glaso
+    :param Correlacion: Standing=1 o Glaso=2
     :param Rs: Sol
     :param T: Solubilidad del gas (pcn/bn)
     :param Yg: Gravedad especifica del gas
@@ -53,7 +51,7 @@ def Bo(Correlacion, Rs, T, Yg, API= None, Yo = None):
 #Funcion para Pb
 def Pb(Correlacion, Rs, T, API, Yg):
     """
-    :param Correlacion: Standing o Glaso
+    :param Correlacion: Standing=1 o Glaso=2
     :param Rs: Solubilidad del gas (pcn/bn)
     :param T: Temperatura del sistema
     :param API: Gravedad API del petroleo
@@ -77,7 +75,7 @@ def Pb(Correlacion, Rs, T, API, Yg):
 #Funcion para Uo
 def Uo(Correlacion, API, T):
     """
-    :param Correlacion: Beggs & Robinson o Glaso
+    :param Correlacion: Beggs & Robinson=1 o Glaso=2
     :param API: Gravedad API del petroleo
     :param T: Temperatura del sistema
     :return: Viscosidad del petroleo en cp

@@ -70,6 +70,12 @@ def main():
     parametros_pb5 = sheet[COL_PB5].options(np.array, transpose=True).value
     sheet[RES_PB5].value = Pb(*parametros_pb5)
 
+    # Llamar valores de la correlacion Uo
+
+
+
+
+
 
 if __name__ == "__main__":
     xw.Book("Frontend.xlsm").set_mock_caller()

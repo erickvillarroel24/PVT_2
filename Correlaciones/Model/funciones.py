@@ -7,7 +7,7 @@ import numpy as np
 #%%
 #Funcion para Rs
 
-def rs2(Correlacion, P, API, T, Yg = None, Yo = None):
+def rs(Correlacion, P, API, T, Yg = None, Yo = None):
     """
     :param Correlacion: Standing o Glaso
     :param P: Presion del sistema (psi)
@@ -29,38 +29,9 @@ def rs2(Correlacion, P, API, T, Yg = None, Yo = None):
         return Rs
 
 #%%
-def rs(Correlacion, P, API, T, Yg = None, Yo = None):
-    """
-    :param Correlacion: Standing o Glaso
-    :param P: Presion del sistema (psi)
-    :param API: Gravedad API del petroleo
-    :param T: Temperatura del sistema (°R)
-    :param Yg: Densidad del gas
-    :param Yo: Densidad del petroleo
-    :return: Solubilidad del gas (Rs) [pcn/bn]
-    """
-    Rs1 = []
-    if Correlacion == 1:
-        x1 = 0.0125*API - 0.00091*(T-460)
-        for i in P:
-            Rs = Yg*(((i/18.2)+1.4)*(10**x1))**1.2048
-            Rs1.append(round(Rs,2))
-        return Rs1
-
-    elif Correlacion == 2:
-        for j in P:
-            x2 = 2.8869 - (14.811 - (3.3093*math.log(j,10)))**0.5
-            Pb = 10**x2
-            Rs = Yg*(((API**0.989/(T-469)**0.172)*Pb))**1.2255
-            Rs1.append(round(Rs,2))
-        return Rs1
-
-
-
-#%%
 #Funcion para Bo
 
-def Bo(Correlacion, Rs, T, Yg, API = None, Yo = None):
+def Bo(Correlacion, Rs, T, Yg, API= None, Yo = None):
     """
     :param Correlacion: Standing o Glaso
     :param Rs: Sol
@@ -70,64 +41,15 @@ def Bo(Correlacion, Rs, T, Yg, API = None, Yo = None):
     :param Yo: Gravedad especifica del petroleo
     :return: Factor volumetrico del petroleo (Bo) [bbls/stb]
     """
-    Bo1 = []
-    if Correlacion == 'standing':
-        for i in Rs:
-            Bo = 0.9759 + 0.000120*(((i*((Yg/Yo)**0.5)) + (1.25*(T-460))))**1.2
-            Bo1.append(round(Bo,2))
-        return np.array(Bo1),np.array(Rs)
+    if Correlacion == 1:
+        Bo = 0.9759 + 0.000120*(((Rs*((Yg/Yo)**0.5)) + (1.25*(T-460))))**1.2
+        return Bo
 
-
-#%%
-def BoP(correlacion, Rs, T, Yg, Yo = None, API = None):
-    """
-    :param correlacion: Al-Marhoun o Petrosky & Farshad
-    :param Rs: Solubilidad del gas (pcn/bn)
-    :param P: Presion del sistema (psi)
-    :param API: Gravedad API del petroleo
-    :param T: Temperatura del sistema
-    :param Yg: Gravedad especifica del gas
-    :param Yo: Gravedad especifica del petroleo
-    :return: Factor volumetrico del petroleo (Bo) [bbls/stb]
-    """
-    a = 0.742390
-    b = 0.323294
-    c = -1.202040
-    Bo1 = []
-    if API != None:
-        yo = 141.5/(131.5 + API)
-        if correlacion == 'marhoun':
-            for i in Rs:
-                f = (i**a)*(Yg**b)*(yo**c)
-                bo = 0.497069 + (0.862963*(10**-3))*T + (0.182524*(10**-2))*f + \
-                (0.318099*(10**-5))*(f**2)
-                Bo1.append(round(bo,2))
-            return np.array(Bo1)
-        elif correlacion == 'petrosky':
-            for j in Rs:
-                bo = 1.0113 + (7.2046*(10**-5))*(((j**0.3778)*(Yg**0.2914/yo**0.6265))
-                +((0.24626)*(T-460)**0.5371))**3.0936
-                Bo1.append(round(bo, 2))
-            return np.array(Bo1)
-
-    elif API == None:
-        if correlacion == 'marhoun':
-            for i in Rs:
-                f = (i ** a) * (Yg ** b) * (Yo ** c)
-                bo = 0.497069 + (0.862963 * (10 ** -3)) * T + (0.182524 * (10 ** -2))\
-                * f + (0.318099 * (10 ** -5)) * (f ** 2)
-                Bo1.append(round(bo, 2))
-            return np.array(Bo1)
-
-        elif correlacion == 'petrosky':
-            for j in Rs:
-                bo = 1.0113 + (7.2046 * (10 ** -5)) * (((j ** 0.3778)
-                * (Yg ** 0.2914 / Yo ** 0.6265)) + ((0.24626) * (T - 460)
-                ** 0.5371)) ** 3.0936
-                Bo1.append(round(bo, 2))
-            return np.array(Bo1)
-
-
+    elif Correlacion == 2:
+        bob = (Rs*((Yg/Yo)**0.526)) + (0.968*(T - 460))
+        a = -6.58511 + (2.91329*math.log(bob,10)) - (0.27683*(math.log(bob))**2)
+        Bo = 1 + (10**a)
+        return Bo
 
 #%%
 #Funcion para Pb
@@ -144,21 +66,15 @@ def Pb(Correlacion, Rs, T, API, Yg):
     a = 0.816
     b = 0.172
     c = -0.989
-    Pb1 = []
-    if Correlacion == 'standing':
-        for i in Rs:
-            a1 = 0.00091*(T-460) - (0.0125*API)
-            Pb = 18.2*(((i/Yg)**0.83)*(10**a1)-1.4)
-            Pb1.append(round(Pb,2))
-        return np.array(Pb1)
+    if Correlacion == 1:
+        a1 = 0.00091*(T-460) - (0.0125*API)
+        Pb = 18.2*(((Rs/Yg)**0.83)*(10**a1)-1.4)
+        return Pb
 
-    elif Correlacion == 'glaso':
-        for j in Rs:
-            pbb = ((j/Yg)**a)*(T**b)*(API**c)
-            Pb = 10**(1.7669 + (1.7447*math.log(pbb,10))
-            - (0.30218*(math.log(pbb,10))**2))
-            Pb1.append(round(Pb, 2))
-        return np.array(Pb1)
+    elif Correlacion == 2:
+        pbb = ((Rs/Yg)**a)*(T**b)*(API**c)
+        Pb = 10**(1.7669 + (1.7447*math.log(pbb,10))- (0.30218*(math.log(pbb,10))**2))
+        return Pb
 
 #%%
 #Funcion para Uo
